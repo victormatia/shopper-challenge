@@ -1,0 +1,42 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./build/server.js",
+  "scripts": {
+    "build": "npx tsc",
+    "test": "mocha -r ts-node/register src/tests/**/*.test.ts --exit -t 20000",
+    "dev": "tsnd --respawn --transpile-only src/server.ts",
+    "prestart": "npx prisma generate",
+    "start": "node build/server.js"
+  },
+  "keywords": [],
+  "author": "Victor Matias",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/chai": "^4.3.14",
+    "@types/chai-http": "^4.2.0",
+    "@types/express": "^4.17.21",
+    "@types/jsonwebtoken": "^9.0.6",
+    "@types/mocha": "^10.0.6",
+    "@types/node": "^20.12.2",
+    "@types/sinon": "^17.0.3",
+    "@typescript-eslint/eslint-plugin": "^7.5.0",
+    "@typescript-eslint/parser": "^7.5.0",
+    "chai": "^4.3.7",
+    "chai-http": "^4.4.0",
+    "eslint": "^8.57.0",
+    "mocha": "^10.4.0",
+    "prisma": "^5.13.0",
+    "sinon": "^17.0.1",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.13.0",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "moment": "^2.30.1"
+  }
+}
