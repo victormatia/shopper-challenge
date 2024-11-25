@@ -6,3 +6,46 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+model Customer {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  ride Ride[]
+}
+
+model Driver {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String
+  vehicle     String
+  feePerKm    Decimal  @map("fee_per_km") @db.Decimal(10, 2)
+  minKm       Decimal  @map("min_km") @db.Decimal(10, 2)
+
+  review      Review[]
+  ride        Ride[]
+}
+
+model Review {
+  id       Int     @id @default(autoincrement())
+  driverId Int
+  rating   Int
+  review   String?
+
+  driver Driver @relation(fields: [driverId], references: [id])
+}
+
+model Ride {
+  id         Int @id @default(autoincrement())
+  date DateTime
+  customerId Int @map("customer_id")
+  driverId   Int @map("drive_id")
+  origin      String
+  destination String
+  distance    Decimal @db.Decimal(10, 2)
+  duration    String
+  value Decimal @db.Decimal(10,2)
+
+  customer Customer @relation(fields: [customerId], references: [id])
+  driver   Driver   @relation(fields: [driverId], references: [id])
+}
