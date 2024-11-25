@@ -16,6 +16,10 @@ services:
     working_dir: /backend
     depends_on:
       - db
+    env_file:
+      - .env
+    environment:
+      - DATABASE_URL=mysql://root:123456@localhost:3306/shopper
 
   db:
     image: mysql:8.0.21
