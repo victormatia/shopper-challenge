@@ -1,12 +1,10 @@
-import { PrismaClient } from '@prisma/client';
 import IMutation from '../interfaces/IMutation';
 import IQuery from '../interfaces/IQuery';
 
 abstract class GenericModel<T> implements IQuery<T>, IMutation<T> {
-  private _orm: PrismaClient;
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public async create(data: unknown): Promise<T> {
+  public async create(data: T): Promise<T> {
     return {} as T;
   }
 
