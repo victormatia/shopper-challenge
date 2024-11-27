@@ -10,9 +10,22 @@ class RideModel extends GenericModel<Ride> {
     return await this._orm.ride.create({ data });
   }
 
-  // public async getAll(): Promise<Ride[]> {
-  //   return await this._orm.ride.findMany({include: { driver: true }});
-  // }
+  public async getMany(filter: Partial<Ride>): Promise<Ride[]> {
+    return await this._orm.ride.findMany({ 
+      where: filter,
+      select: {
+        id: true,
+        customerId: true,
+        date: true,
+        origin: true,
+        destination: true,
+        distance: true,
+        duration: true,
+        driver: { select: { id: true, name: true } },
+        value: true,   
+      },
+    }) as unknown as Ride[];
+  }
 }
 
 export default RideModel;
