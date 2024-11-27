@@ -11,5 +11,6 @@ const service = new RideService(model);
 const controller = new RideController(service);
 
 router.post('/estimate', controller.estimate.bind(controller));
+router.patch('/confirm', controller.create.bind(controller));
 
 export default router;
