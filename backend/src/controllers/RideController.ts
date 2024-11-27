@@ -29,6 +29,28 @@ class RideController {
       next(e);
     }
   }
+
+  public async create(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { customer_id, origin, destination } = req.body;
+
+      if (!customer_id || !origin || !destination) {
+        throw new BadRequestError('The data provided is invalid');
+      }
+
+      if (origin === destination) {
+        throw new BadRequestError('The data provided is invalid');
+      }
+
+      const response = await this._service.create(req.body);
+
+      res.status(200).json(response);
+
+    } catch(e) {
+      console.log(e);
+      next(e);
+    }
+  }
 }
 
 export default RideController;
