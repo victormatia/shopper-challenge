@@ -10,7 +10,7 @@ class ApiError extends Error {
   }
 
   public get status_code(): string {
-    return ErrorCodeEnum[this._status];
+    return ErrorCodeEnum[this._status_code];
   }
 
 }
