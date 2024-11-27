@@ -56,17 +56,17 @@ async function main() {
       {
         driverId: 1,
         rating: 2,
-        review: 'Motorista simpático, mas errou o caminho 3 vezes. O carro cheira a donuts.',
+        comment: 'Motorista simpático, mas errou o caminho 3 vezes. O carro cheira a donuts.',
       },
       {
         driverId: 2,
         rating: 4,
-        review: 'Que viagem incrível! O carro é um show à parte e o motorista, apesar de ter uma cara de poucos amigos, foi super gente boa. Recomendo!',
+        comment: 'Que viagem incrível! O carro é um show à parte e o motorista, apesar de ter uma cara de poucos amigos, foi super gente boa. Recomendo!',
       },
       {
         driverId: 3,
         rating: 5,
-        review: 'Serviço impecável! O motorista é a própria definição de classe e o carro é simplesmente magnífico. Uma experiência digna de um agente secreto.',
+        comment: 'Serviço impecável! O motorista é a própria definição de classe e o carro é simplesmente magnífico. Uma experiência digna de um agente secreto.',
       },
     ],
   }); 
