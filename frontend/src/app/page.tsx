@@ -1,3 +1,8 @@
 export default function Home() {
-  return <div>Home</div>;
+  const test = 'test';
+  return (
+    <main>
+      <h1>Home</h1>
+    </main>
+  );
 }
