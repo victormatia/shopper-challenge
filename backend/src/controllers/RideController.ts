@@ -51,6 +51,26 @@ class RideController {
       next(e);
     }
   }
+
+  public async getMany(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { customer_id } = req.params;
+      const { driver_id } = req.query;
+
+      if (!customer_id || isNaN(Number(customer_id))) throw new BadRequestError('The data provided is invalid');
+
+      if (driver_id && !isNaN(Number(driver_id))) {
+        const response = await this._service.getMany({ customerId: +customer_id, driverId: +driver_id });
+
+        return res.status(200).json(response);
+      } 
+      const response = await this._service.getMany({ customerId: +customer_id });
+
+      res.status(200).json(response);
+    } catch(e) {
+      next(e);
+    }
+  }
 }
 
 export default RideController;
