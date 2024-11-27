@@ -10,6 +10,7 @@ const model = new RideModel(prisma);
 const service = new RideService(model);
 const controller = new RideController(service);
 
+router.get('/:customer_id', controller.getMany.bind(controller));
 router.post('/estimate', controller.estimate.bind(controller));
 router.patch('/confirm', controller.create.bind(controller));
 
