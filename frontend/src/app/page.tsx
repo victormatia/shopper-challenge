@@ -1,8 +1,5 @@
+import { redirect } from 'next/navigation';
+
 export default function Home() {
-  const test = 'test';
-  return (
-    <main>
-      <h1>Home</h1>
-    </main>
-  );
+  return redirect('/ride_request');
 }
