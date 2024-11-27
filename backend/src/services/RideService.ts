@@ -1,11 +1,13 @@
 import { Ride } from '@prisma/client';
 import GenericModel from '../models/GenericModel';
 import { TEstimateRequestInput } from '../types';
-import { Client, TravelMode } from '@googlemaps/google-maps-services-js';
+import { TravelMode } from '@googlemaps/google-maps-services-js';
 import InternalServerError from '../Error/InternalServerError';
 import ApiError from '../Error/ApiError';
-
-const mapsClient = new Client();
+import DriverModel from '../models/DriverModel';
+import prisma from '../libs/PrismaClient';
+import { Decimal } from '@prisma/client/runtime/library';
+import mapsClient from '../libs/mapsClients';
 
 class RideService {
   private GOOGLE_API_KEY?: string;
@@ -29,12 +31,25 @@ class RideService {
 
       const { data } = await mapsClient.directions({ params });
 
+      const driverModel = new DriverModel(prisma);
+
       const legs = data.routes[0].legs[0];
+
+      const distanceInKilometers = new Decimal(legs.distance.value / 1000);
+
+      const driversAvailable = await driverModel.getMany({ minKm: distanceInKilometers });
+
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const driversAvailableFormatedAndSorted = driversAvailable.map(({ feePerKm, minKm, ...driver }) => {
+        return {
+          ...driver,
+          value: Number(feePerKm) * Number(distanceInKilometers),
+        };}).sort((a, b) => a.value - b.value);
 
       const reponse = {
         origin: {
           latitude: legs.start_location.lat,
-          longitude: legs.start_location.lng, 
+          longitude: legs.start_location.lng,
         },
         destination: {
           latitude: legs.end_location.lat,
@@ -42,7 +57,7 @@ class RideService {
         },
         distance: legs.distance.value,
         duration: legs.duration.value,
-        options: [],
+        options: driversAvailableFormatedAndSorted,
         routeResponse: data,
       };
 
