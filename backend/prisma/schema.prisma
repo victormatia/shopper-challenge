@@ -30,7 +30,7 @@ model Review {
   id       Int     @id @default(autoincrement())
   driverId Int
   rating   Int
-  review   String?
+  comment   String?
 
   driver Driver @relation(fields: [driverId], references: [id])
 }
