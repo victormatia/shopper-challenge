@@ -23,7 +23,7 @@ abstract class GenericModel<T> implements IQuery<T>, IMutation<T> {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public async getMany(filter: T): Promise<T[]> {
+  public async getMany(filter: Partial<T>): Promise<T[]> {
     return [] as T[];
   }
 
