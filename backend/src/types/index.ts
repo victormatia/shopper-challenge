@@ -19,4 +19,6 @@ export type TCreateRideInput = {
   },
   'value': number
  }
+
+export type TGetRidesInput = { customerId: number, driverId?: number}
  
