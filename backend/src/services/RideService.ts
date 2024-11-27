@@ -1,6 +1,6 @@
 import { Driver, Ride } from '@prisma/client';
 import GenericModel from '../models/GenericModel';
-import { TCreateRideInput, TEstimateRequestInput } from '../types';
+import { TCreateRideInput, TEstimateRequestInput, TGetRidesInput } from '../types';
 import { TravelMode } from '@googlemaps/google-maps-services-js';
 import InternalServerError from '../Error/InternalServerError';
 import DriverModel from '../models/DriverModel';
@@ -9,6 +9,8 @@ import { Decimal } from '@prisma/client/runtime/library';
 import mapsClient from '../libs/mapsClients';
 import NotFoundError from '../Error/NotFoundError';
 import NotAcceptable from '../Error/NotAcceptable';
+import BadRequestError from '../Error/BadRequestError';
+import { ErrorCodeEnum } from '../types/ErrorCodeEnum';
 
 class RideService {
   private GOOGLE_API_KEY?: string;
@@ -63,11 +65,11 @@ class RideService {
   }
 
   public async create(input: TCreateRideInput) {
-    const driver = await this._driverModel.getById(input.driver.id );
+    const driver = await this._driverModel.getById(input.driver.id);
 
-    if (!driver) throw new NotFoundError('Driver not found');
+    if (!driver) throw new NotFoundError('Driver not found', ErrorCodeEnum.DRIVER_NOT_FOUND);
 
-    if (+driver.minKm < input.distance) throw new NotAcceptable('Invalid mileage for the driver');
+    if (+driver.minKm > input.distance / 1000) throw new NotAcceptable('Invalid mileage for the driver');
 
     const data: Ride = {
       origin: input.origin,
@@ -83,6 +85,29 @@ class RideService {
     await this._model.create(data);
 
     return { success: true };
+  }
+
+  public async getMany(filter: TGetRidesInput) {
+
+    let driver: Driver | null = null;
+
+    if (filter.driverId) {
+      driver = await this._driverModel.getById(filter.driverId);
+      
+      if (!driver) throw new BadRequestError('Invalid Driver', ErrorCodeEnum.INVALID_DRIVER);
+    }
+
+    const data = await this._model.getMany(filter);
+
+    if (!data.length) throw new NotFoundError('', ErrorCodeEnum.NO_RIDES_FOUND);
+    
+    const response = {
+      'customer_id': data[0].customerId,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      'rides': data.map(({ customerId, ...rideWihtoutCustomerId }) => rideWihtoutCustomerId),
+    };
+
+    return response;
   }
 
 }
