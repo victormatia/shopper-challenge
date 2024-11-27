@@ -6,6 +6,10 @@ class DriverModel extends GenericModel<Driver> {
     super();
   }
 
+  public async getById(id: string | number): Promise<Driver | null> {
+    return await this._orm.driver.findUnique({ where: { id: +id } });
+  }
+
   public async getMany(filter: Partial<Driver>): Promise<Driver[]> {
     console.log(filter);
     return await this._orm.driver.findMany({ 
