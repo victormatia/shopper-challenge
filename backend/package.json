@@ -6,9 +6,12 @@
   "scripts": {
     "build": "npx tsc",
     "test": "mocha -r ts-node/register src/tests/**/*.test.ts --exit -t 20000",
+    "predev": "npx prisma generate",
     "dev": "tsnd --respawn --transpile-only src/server.ts",
     "prestart": "npx prisma generate",
-    "start": "node build/server.js"
+    "start": "node build/server.js",
+    "db:seed": "ts-node prisma/seed.ts",
+    "db:reset": "npx prisma db push --force-reset  && npm run db:seed"
   },
   "keywords": [],
   "author": "Victor Matias",
@@ -34,6 +37,7 @@
     "typescript": "^5.4.5"
   },
   "dependencies": {
+    "@googlemaps/google-maps-services-js": "^3.4.0",
     "@prisma/client": "^5.13.0",
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",

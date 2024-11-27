@@ -1,7 +1,8 @@
 import express, { Express, NextFunction, Request, Response } from 'express';
 // import userRoutes from './routes/UserRoutes';
-// import { errorMiddleware } from './middlewares/ErrorMiddleware';
+import { errorMiddleware } from './middlewares/ErrorMiddleware';
 // import authMiddleware from './middlewares/authMiddleware';
+import rideRouter from './routes/ride.routes';
 
 class App {
   private _server: Express;
@@ -13,17 +14,16 @@ class App {
   }
   
   private router() {
-    // rota de teste
+    // test route
     this._server.get('/test', (_req, res) => res.status(200).json({ status: 'OK test' }));
 
     // authenticate route
-    // this._server.use('/user', userRoutes);
-
     // this._server.use(authMiddleware);
     
     // others routes here
+    this._server.use('/ride', rideRouter);
 
-    // this._server.use(errorMiddleware);
+    this._server.use(errorMiddleware);
   }
 
   private config():void {

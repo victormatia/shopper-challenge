@@ -1,10 +1,10 @@
 import { ErrorCodeEnum } from '../types/ErrorCodeEnum';
 import ApiError from './ApiError';
 
-class NotAuthorizedError extends ApiError {
+class NotAcceptable extends ApiError {
   constructor(message: string) {
-    super(message, 401, ErrorCodeEnum.UNAUTHORIZED);
+    super(message, 406, ErrorCodeEnum.INVALID_DISTANCE);
   }
 }
 
-export default NotAuthorizedError;
+export default NotAcceptable;
