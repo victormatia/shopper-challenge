@@ -7,6 +7,8 @@ services:
     working_dir: /frontend
     depends_on: 
       - backend
+    environment:
+      - NEXT_PUBLIC_GOOGLE_API_KEY=${GOOGLE_API_KEY} 
   
   backend:
     build: ./backend
