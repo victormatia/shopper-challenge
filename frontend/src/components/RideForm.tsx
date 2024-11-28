@@ -1,15 +1,16 @@
 'use client';
 
-import React from 'react';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { Button } from './ui/button';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useMutation } from '@tanstack/react-query';
 import axiosCustomInstance from '@/lib/axios';
 import { TEstimateRequestInput } from '@/types';
+import { useRouter } from 'next/navigation';
+import queryClient from '@/lib/queryClient';
 
 const formSchema = z.object({
   userId: z.coerce.number().min(1, { message: 'O ID do usuário deve ser maior que 0.' }),
@@ -18,6 +19,8 @@ const formSchema = z.object({
 });
 
 function RideForm() {
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -33,12 +36,16 @@ function RideForm() {
       const { data } = await axiosCustomInstance.post('/ride/estimate', input);
       return data;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      localStorage.setItem('estimate', JSON.stringify(data));
+
       form.reset({
         userId: 0,
         origin: '',
         destination: '',
       });
+
+      router.push('/select_driver');
     },
     onError: (e) => {
       console.error(e);
@@ -51,6 +58,7 @@ function RideForm() {
   });
 
   const onSubmit = async ({ userId, origin, destination }: z.infer<typeof formSchema>) => {
+    localStorage.setItem('userId', String(userId));
     await estimateRideMutation.mutateAsync({ customer_id: userId, origin, destination });
   };
 
