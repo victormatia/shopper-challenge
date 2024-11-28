@@ -6,7 +6,7 @@
   "scripts": {
     "build": "npx tsc",
     "test": "mocha -r ts-node/register src/tests/**/*.test.ts --exit -t 20000",
-    "predev": "npx prisma generate",
+    "predev": "npx prisma generate && npm run db:seed",
     "dev": "tsnd --respawn --transpile-only src/server.ts",
     "prestart": "npx prisma generate",
     "start": "node build/server.js",
